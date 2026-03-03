@@ -1,8 +1,21 @@
+from collections.abc import AsyncIterator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 
 from app.config import settings
+from app.db import close_db, init_db
 
-app = FastAPI(title="Gastown Financial API")
+
+@asynccontextmanager
+async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
+    """Initialize DB pool + schema on startup, close on shutdown."""
+    await init_db()
+    yield
+    await close_db()
+
+
+app = FastAPI(title="Gastown Financial API", lifespan=lifespan)
 
 
 @app.get("/api/health")
