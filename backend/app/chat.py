@@ -235,7 +235,10 @@ async def _call_llm(messages: list[dict]) -> str:
         temperature=0.7,
         max_tokens=1024,
     )
-    return response.choices[0].message.content
+    content = response.choices[0].message.content
+    if not content:
+        raise ValueError("LLM returned empty content")
+    return content
 
 
 def _parse_llm_json(raw: str) -> dict:
