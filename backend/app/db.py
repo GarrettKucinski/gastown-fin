@@ -19,6 +19,21 @@ DEFAULT_WATCHLIST = [
 
 DEFAULT_CASH_BALANCE = 10_000.0
 
+# Default portfolio positions: (symbol, quantity, avg_cost)
+# Spreads across all 10 tickers with varying sizes for a realistic treemap
+DEFAULT_POSITIONS: list[tuple[str, float, float]] = [
+    ("AAPL", 25, 165.00),
+    ("GOOGL", 15, 135.50),
+    ("MSFT", 12, 350.00),
+    ("AMZN", 20, 170.00),
+    ("TSLA", 10, 220.00),
+    ("NVDA", 8, 450.00),
+    ("META", 14, 370.00),
+    ("JPM", 18, 175.00),
+    ("V", 10, 260.00),
+    ("NFLX", 6, 470.00),
+]
+
 
 def _asyncpg_dsn() -> str:
     """Convert SQLAlchemy-style DSN to plain postgresql:// for asyncpg."""
@@ -91,4 +106,18 @@ async def _seed_defaults(conn: asyncpg.Connection) -> None:
             """,
             user_id,
             symbol,
+        )
+
+    # Seed default positions (simulated portfolio)
+    for symbol, qty, cost in DEFAULT_POSITIONS:
+        await conn.execute(
+            """
+            INSERT INTO positions (user_id, symbol, quantity, avg_cost)
+            VALUES ($1, $2, $3, $4)
+            ON CONFLICT (user_id, symbol) DO NOTHING
+            """,
+            user_id,
+            symbol,
+            qty,
+            cost,
         )
