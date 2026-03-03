@@ -25,8 +25,8 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function formatDate(timestamp: string): string {
-  return new Date(timestamp).toLocaleDateString("en-US", {
+function formatDate(timestamp: unknown): string {
+  return new Date(String(timestamp)).toLocaleDateString("en-US", {
     month: "short",
     day: "numeric",
   });
@@ -154,7 +154,7 @@ export function PnLChart() {
               fontSize: "13px",
             }}
             labelFormatter={formatDate}
-            formatter={(value: number) => [formatCurrency(value), "Value"]}
+            formatter={(value) => [formatCurrency(Number(value)), "Value"]}
           />
           <Area
             type="monotone"

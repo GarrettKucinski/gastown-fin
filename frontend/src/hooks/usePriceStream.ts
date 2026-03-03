@@ -10,6 +10,8 @@ export interface PriceTick {
   change_direction: "up" | "down" | "flat";
 }
 
+export type PriceMap = Record<string, PriceTick>;
+
 export interface PriceHistory {
   time: number;
   value: number;
