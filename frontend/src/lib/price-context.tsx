@@ -5,7 +5,6 @@ import {
   useCallback,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 import type { ReactNode } from "react";
@@ -41,11 +40,6 @@ export function PriceProvider({ children }: { children: ReactNode }) {
     () => new Map(),
   );
   const [status, setStatus] = useState<ConnectionStatus>("disconnected");
-
-  // Use ref to avoid stale closure in SSE callbacks while still
-  // batching React state updates correctly.
-  const pricesRef = useRef(prices);
-  pricesRef.current = prices;
 
   const handlePrice = useCallback((event: PriceEvent) => {
     setPrices((prev) => {
