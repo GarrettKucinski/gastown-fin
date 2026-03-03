@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { PriceProvider } from "@/context/PriceContext";
 
 export const metadata: Metadata = {
   title: "Gastown Finance",
@@ -37,7 +38,9 @@ export default function RootLayout({
       <body className="min-h-screen bg-bg-primary text-text-primary antialiased">
         <Header />
         <Providers>
-          <main className="flex-1">{children}</main>
+          <PriceProvider>
+            <main className="flex-1">{children}</main>
+          </PriceProvider>
         </Providers>
       </body>
     </html>
