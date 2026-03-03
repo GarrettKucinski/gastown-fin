@@ -9,8 +9,8 @@ from app.config import settings
 from app.db import DEFAULT_WATCHLIST, close_db, init_db
 from app.market.provider import MarketDataProvider
 from app.market.simulator import GBMSimulator
-from app.routers.chat import router as chat_router
 from app.routers.portfolio import router as portfolio_router
+from app.snapshots import PortfolioSnapshotter
 from app.stream import router as stream_router
 
 logger = logging.getLogger(__name__)
@@ -28,7 +28,7 @@ def get_market_provider() -> MarketDataProvider:
 
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    """Initialize DB pool + schema on startup, start market sim, close on shutdown."""
+    """Initialize DB pool + schema on startup, start market sim and snapshotter, close on shutdown."""
     global _provider
 
     await init_db()
@@ -38,9 +38,14 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
     await _provider.start(set(DEFAULT_WATCHLIST))
     logger.info("Market data provider started")
 
+    # Start portfolio snapshotter
+    snapshotter = PortfolioSnapshotter()
+    snapshotter.start()
+
     yield
 
-    # Shutdown: stop simulator, then close DB
+    # Shutdown: stop snapshotter, simulator, then close DB
+    snapshotter.stop()
     if _provider is not None:
         await _provider.stop()
         _provider = None
