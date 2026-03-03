@@ -36,10 +36,8 @@ function pnlColor(pnlPct: number): string {
   }
 }
 
-/** Choose white or dark text depending on background brightness. */
-function textColor(pnlPct: number): string {
-  return "#e6edf3"; // always light on our dark-ish cells
-}
+// Light text on all cells — our P&L palette stays dark enough for contrast
+const CELL_TEXT_COLOR = "#e6edf3";
 
 // ── Treemap layout ─────────────────────────────────────────────────
 
@@ -164,7 +162,7 @@ export default function PortfolioHeatmap() {
             const w = (node.x1 ?? 0) - (node.x0 ?? 0);
             const h = (node.y1 ?? 0) - (node.y0 ?? 0);
             const bg = pnlColor(d.pnlPct);
-            const fg = textColor(d.pnlPct);
+            const fg = CELL_TEXT_COLOR;
 
             // Only show labels if cell is large enough
             const showTicker = w > 40 && h > 28;
