@@ -85,11 +85,6 @@ class HistoryResponse(BaseModel):
     snapshots: list[SnapshotItem]
 
 
-class ErrorResponse(BaseModel):
-    error: str
-    detail: str
-
-
 # ── Helpers ──────────────────────────────────────────────────────────
 
 
@@ -100,12 +95,6 @@ async def _get_user_id(conn: asyncpg.Connection) -> str:
     if uid is None:
         raise HTTPException(status_code=500, detail="Default user not found")
     return uid
-
-
-def _to_float(val: Decimal | float | None) -> float | None:
-    if val is None:
-        return None
-    return float(val)
 
 
 # ── Endpoints ────────────────────────────────────────────────────────
