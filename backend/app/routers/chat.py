@@ -5,6 +5,7 @@ from __future__ import annotations
 import logging
 from uuid import UUID
 
+import asyncpg
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 
@@ -58,7 +59,7 @@ class ChatResponse(BaseModel):
 # ── Helpers ──────────────────────────────────────────────────────────
 
 
-async def _get_user_id(conn) -> UUID:
+async def _get_user_id(conn: asyncpg.Connection) -> UUID:
     uid = await conn.fetchval(
         "SELECT id FROM users WHERE email = $1", DEFAULT_USER_EMAIL
     )
@@ -67,7 +68,7 @@ async def _get_user_id(conn) -> UUID:
     return uid
 
 
-async def _save_message(conn, user_id: UUID, role: str, content: str) -> None:
+async def _save_message(conn: asyncpg.Connection, user_id: UUID, role: str, content: str) -> None:
     await conn.execute(
         "INSERT INTO chat_messages (user_id, role, content) VALUES ($1, $2, $3)",
         user_id,
@@ -76,7 +77,7 @@ async def _save_message(conn, user_id: UUID, role: str, content: str) -> None:
     )
 
 
-async def _get_history(conn, user_id: UUID, limit: int = 50) -> list[ChatMessageOut]:
+async def _get_history(conn: asyncpg.Connection, user_id: UUID, limit: int = 50) -> list[ChatMessageOut]:
     rows = await conn.fetch(
         """
         SELECT role, content FROM chat_messages
