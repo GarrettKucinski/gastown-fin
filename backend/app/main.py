@@ -8,6 +8,7 @@ from app.config import settings
 from app.db import DEFAULT_WATCHLIST, close_db, init_db
 from app.market.provider import MarketDataProvider
 from app.market.simulator import GBMSimulator
+from app.routers.portfolio import router as portfolio_router
 from app.stream import router as stream_router
 
 logger = logging.getLogger(__name__)
@@ -46,6 +47,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
 app = FastAPI(title="Gastown Financial API", lifespan=lifespan)
 app.include_router(stream_router)
+app.include_router(portfolio_router)
 
 
 @app.get("/api/health")
