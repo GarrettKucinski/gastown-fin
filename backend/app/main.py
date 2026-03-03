@@ -4,6 +4,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 
+from app.chat import router as chat_router
 from app.config import settings
 from app.db import DEFAULT_WATCHLIST, close_db, init_db
 from app.market.provider import MarketDataProvider
@@ -48,6 +49,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(title="Gastown Financial API", lifespan=lifespan)
 app.include_router(stream_router)
 app.include_router(portfolio_router)
+app.include_router(chat_router)
 
 
 @app.get("/api/health")
