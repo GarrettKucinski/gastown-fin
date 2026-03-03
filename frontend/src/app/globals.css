@@ -9,6 +9,8 @@
   --color-text-primary: #e6edf3;
   --color-text-secondary: #8b949e;
   --color-border: #30363d;
+  --color-spark-up: #22c55e;
+  --color-spark-down: #ef4444;
 }
 
 body {

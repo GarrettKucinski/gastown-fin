@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { WatchlistPanel } from "@/components/watchlist-panel";
 import { PriceChartPanel } from "@/components/price-chart-panel";
 import { HeatmapPanel } from "@/components/heatmap-panel";
@@ -23,11 +24,16 @@ import { ChatPanel } from "@/components/chat-panel";
  * └─────────┴──────────────────────────┴─────────┘
  */
 export default function Home() {
+  const [selectedTicker, setSelectedTicker] = useState<string | null>(null);
+
   return (
     <div className="flex h-full overflow-hidden">
       {/* Left sidebar: Watchlist */}
       <aside className="hidden w-48 shrink-0 border-r border-border bg-bg-secondary md:block">
-        <WatchlistPanel />
+        <WatchlistPanel
+          selectedTicker={selectedTicker}
+          onSelectTicker={setSelectedTicker}
+        />
       </aside>
 
       {/* Center: main trading area */}
