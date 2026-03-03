@@ -6,7 +6,7 @@ from dataclasses import dataclass, field
 from datetime import datetime, timezone
 
 
-@dataclass(slots=True)
+@dataclass
 class PriceEntry:
     price: float
     previous_price: float | None = None
