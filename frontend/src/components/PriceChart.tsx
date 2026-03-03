@@ -15,7 +15,6 @@ import { usePriceContext } from "@/context/PriceContext";
 const CHART_COLORS = {
   background: "#0d1117",
   text: "#8b949e",
-  textBold: "#e6edf3",
   line: "#209dd7",
   grid: "#1a1a2e",
   crosshair: "#30363d",
