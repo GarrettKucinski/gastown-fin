@@ -48,13 +48,21 @@ export function WatchlistRow({
   const isPositive = changePct >= 0;
 
   return (
-    <button
-      type="button"
+    <div
+      role="button"
+      tabIndex={0}
       onClick={() => onSelect(ticker)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          onSelect(ticker);
+        }
+      }}
       className={`
         group relative grid grid-cols-[72px_1fr_80px_120px_32px] items-center gap-3
-        px-4 py-3 w-full text-left transition-colors duration-150
+        px-4 py-3 w-full text-left transition-colors duration-150 cursor-pointer
         border-b border-border/50 hover:bg-bg-secondary/60
+        focus:outline-none focus:ring-1 focus:ring-accent-blue/50
         ${isSelected ? "bg-bg-secondary border-l-2 border-l-accent-blue" : ""}
       `}
     >
@@ -116,6 +124,6 @@ export function WatchlistRow({
       >
         &times;
       </button>
-    </button>
+    </div>
   );
 }
