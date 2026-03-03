@@ -1,0 +1,17 @@
+[project]
+name = "gastown-fin"
+version = "0.1.0"
+description = "Gastown Financial backend API"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.34.0",
+    "pydantic-settings>=2.7.0",
+    "asyncpg>=0.30.0",
+    "litellm>=1.57.0",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
