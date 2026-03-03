@@ -12,7 +12,7 @@ import time
 from dataclasses import dataclass
 
 
-@dataclass(slots=True)
+@dataclass
 class PriceEntry:
     """A single ticker's cached price data."""
 
