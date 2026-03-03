@@ -26,15 +26,37 @@ def get_market_provider() -> MarketDataProvider:
     return _provider
 
 
+def _create_market_data_provider():
+    """Select the market data provider based on configuration.
+
+    Uses Massive (Polygon.io) when MASSIVE_API_KEY is set and non-empty,
+    otherwise falls back to the built-in GBM simulator.
+    """
+    if settings.massive_api_key:
+        from app.massive import MassiveClient
+
+        logger.info(
+            "Using Massive (Polygon.io) provider, poll_interval=%.1fs",
+            settings.massive_poll_interval,
+        )
+        return MassiveClient(
+            api_key=settings.massive_api_key,
+            poll_interval=settings.massive_poll_interval,
+        )
+
+    logger.info("Using simulated price provider (GBM)")
+    return GBMSimulator()
+
+
 @asynccontextmanager
 async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
-    """Initialize DB pool + schema on startup, start market sim and snapshotter, close on shutdown."""
+    """Initialize DB pool + schema on startup, start market data provider and snapshotter, close on shutdown."""
     global _provider
 
     await init_db()
 
-    # Start the market data simulator as an in-process background task
-    _provider = GBMSimulator()
+    # Start the market data provider (Massive or GBM simulator)
+    _provider = _create_market_data_provider()
     await _provider.start(set(DEFAULT_WATCHLIST))
     logger.info("Market data provider started")
 
@@ -44,7 +66,7 @@ async def lifespan(_app: FastAPI) -> AsyncIterator[None]:
 
     yield
 
-    # Shutdown: stop snapshotter, simulator, then close DB
+    # Shutdown: stop snapshotter, provider, then close DB
     snapshotter.stop()
     if _provider is not None:
         await _provider.stop()
