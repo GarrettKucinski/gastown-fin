@@ -88,9 +88,10 @@ function computeTreemap(
     .padding(2)
     .tile(treemapSquarify);
 
-  layout(root);
+  // layout() mutates nodes in-place, adding x0/y0/x1/y1
+  const laid = layout(root);
 
-  return root.leaves();
+  return laid.leaves() as HierarchyRectangularNode<TreemapRoot | TreemapLeaf>[];
 }
 
 // ── Component ──────────────────────────────────────────────────────
