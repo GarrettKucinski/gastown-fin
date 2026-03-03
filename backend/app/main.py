@@ -10,6 +10,7 @@ from app.db import DEFAULT_WATCHLIST, close_db, init_db
 from app.market.provider import MarketDataProvider
 from app.market.simulator import GBMSimulator
 from app.routers.portfolio import router as portfolio_router
+from app.routers.watchlist import router as watchlist_router
 from app.snapshots import PortfolioSnapshotter
 from app.stream import router as stream_router
 
@@ -78,6 +79,7 @@ app = FastAPI(title="Gastown Financial API", lifespan=lifespan)
 app.include_router(stream_router)
 app.include_router(portfolio_router)
 app.include_router(chat_router)
+app.include_router(watchlist_router)
 
 
 @app.get("/api/health")

@@ -80,3 +80,19 @@ class PriceCache:
 
 # Module-level singleton — shared across the app
 price_cache = PriceCache()
+
+
+# Convenience functions for modules that import get_price/get_prices/set_price
+def get_price(ticker: str) -> PriceEntry | None:
+    """Return the latest cached price for a single ticker."""
+    return price_cache.get(ticker)
+
+
+def get_prices(tickers: list[str]) -> dict[str, PriceEntry | None]:
+    """Return cached prices for multiple tickers."""
+    return {t: price_cache.get(t) for t in tickers}
+
+
+def set_price(ticker: str, price: float, previous_price: float | None = None) -> None:
+    """Update the cache with a new price (called by market data provider)."""
+    price_cache.update(ticker, price)
