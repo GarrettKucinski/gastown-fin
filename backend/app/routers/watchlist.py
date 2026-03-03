@@ -24,7 +24,9 @@ class AddTickerRequest(BaseModel):
 
     @field_validator("ticker", mode="before")
     @classmethod
-    def normalize_ticker(cls, v: str) -> str:
+    def normalize_ticker(cls, v: object) -> str:
+        if not isinstance(v, str):
+            raise ValueError("Ticker must be a string")
         v = v.strip().upper()
         if not _TICKER_RE.match(v):
             raise ValueError("Ticker must be 1-5 uppercase letters")
