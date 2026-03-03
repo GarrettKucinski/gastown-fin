@@ -9,6 +9,7 @@ from app.config import settings
 from app.db import DEFAULT_WATCHLIST, close_db, init_db
 from app.market.provider import MarketDataProvider
 from app.market.simulator import GBMSimulator
+from app.routers.chat import router as chat_router
 from app.routers.portfolio import router as portfolio_router
 from app.stream import router as stream_router
 

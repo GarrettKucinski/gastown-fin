@@ -25,3 +25,15 @@ export interface TickerPrice {
 
 /** Connection status for the SSE client. */
 export type ConnectionStatus = "connected" | "reconnecting" | "disconnected";
+
+/** A single chat message. */
+export interface ChatMessage {
+  role: "user" | "assistant";
+  content: string;
+}
+
+/** Response from POST /api/chat. */
+export interface ChatResponse {
+  message: ChatMessage;
+  history: ChatMessage[];
+}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { PriceProvider } from "@/context/PriceContext";
+import { ChatPanel } from "@/components/chat";
 
 export const metadata: Metadata = {
   title: "Gastown Finance",
@@ -40,6 +41,7 @@ export default function RootLayout({
         <Providers>
           <PriceProvider>
             <main className="flex-1">{children}</main>
+            <ChatPanel />
           </PriceProvider>
         </Providers>
       </body>
