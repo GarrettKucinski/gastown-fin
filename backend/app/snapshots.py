@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import uuid
 
 from app.db import get_pool
 from app.price_cache import price_cache
@@ -20,7 +21,7 @@ CLEANUP_INTERVAL = 3600  # seconds between cleanup runs (1 hour)
 RETENTION_HOURS = 24  # delete snapshots older than this
 
 
-async def take_snapshot(user_id: str) -> None:
+async def take_snapshot(user_id: uuid.UUID) -> None:
     """Calculate and record a portfolio snapshot for a single user.
 
     Total value = cash_balance + sum(position.quantity * current_price).
